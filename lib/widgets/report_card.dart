@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ghealth/widgets/widgets_shelf.dart';
 
-
 class ReportCard extends StatelessWidget {
   const ReportCard({
     Key? key,
@@ -37,7 +36,7 @@ class ReportCard extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 100,
+                height: 30,
               ),
               Center(
                 child: CircularTrackWidget(),
@@ -45,24 +44,34 @@ class ReportCard extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              Row(
-                children: [
-                  DetailCard(
-                    color: Colors.red,
-                    label: "123",
-                    labelColor: Colors.white,
-                  ),
-                  DetailCard(
-                    color: Colors.black,
-                    label: "345",
-                    labelColor: Colors.white,
-                  ),
-                  DetailCard(
-                    color: Colors.blue,
-                    label: "456",
-                    labelColor: Colors.white,
-                  ),
-                ],
+              SizedBox(
+                height: size.height * 0.2,
+                width: size.height,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DetailCard(
+                        color: Colors.red,
+                        label: "123",
+                        labelColor: Colors.white,
+                      ),
+                    ),
+                    Expanded(
+                      child: DetailCard(
+                        color: Colors.black,
+                        label: "345",
+                        labelColor: Colors.white,
+                      ),
+                    ),
+                    Expanded(
+                      child: DetailCard(
+                        color: Colors.blue,
+                        label: "456",
+                        labelColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
