@@ -2,7 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:ghealth/widgets/widgets_shelf.dart';
 
 class MonitorDashboard extends StatelessWidget {
-  const MonitorDashboard({Key? key}) : super(key: key);
+  final String value;
+  final String type;
+  final String unitString;
+  final String dateFrom;
+  final String dateTo;
+
+  const MonitorDashboard(
+      {Key? key,
+      required this.value,
+      required this.type,
+      required this.unitString,
+      required this.dateFrom,
+      required this.dateTo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,25 +50,6 @@ class MonitorDashboard extends StatelessWidget {
         ),
         Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text(
-              "Today",
-              style: Theme.of(context).primaryTextTheme.headline5,
-            ),
-            actions: [
-              Icon(
-                Icons.more_vert_outlined,
-                color: Colors.white,
-              ),
-            ],
-            centerTitle: true,
-            leading: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-          ),
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(
@@ -66,30 +60,13 @@ class MonitorDashboard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Good Morning, Tunç",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
+                  SizedBox(height: 100,),
+                  SingleChildScrollView(child: ReportCard(value: value, type: type, unitString: unitString, dateFrom: dateFrom, dateTo: dateTo)),
+                  ListTile(
+                    title: Text("${type}: ${value}"),
+                    trailing: Text('${unitString}'),
+                    subtitle: Text('${dateFrom} - ${dateTo}'),
                   ),
-                  Text(
-                    "Today Report",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  ReportCard(),
-                  // SizedBox(
-                  //   height: 15,
-                  // ),
-                  // SpecialitiesCard(),
                 ],
               ),
             ),

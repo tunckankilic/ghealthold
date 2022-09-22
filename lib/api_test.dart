@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:ghealth/monitor_dashboard_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:flutter/material.dart';
@@ -234,27 +235,36 @@ class _HealthAppState extends State<HealthApp> {
     return ListView.builder(
         itemCount: _healthDataList.length,
         itemBuilder: (_, index) {
+          Size size = MediaQuery.of(context).size;
           HealthDataPoint p = _healthDataList[index];
           if (p.value is AudiogramHealthValue) {
-            return ListTile(
-              title: Text("${p.typeString}: ${p.value}"),
-              trailing: Text('${p.unitString}'),
-              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
+            return MonitorDashboard(
+              value: p.value.toString(),
+              type: p.typeString,
+              unitString: p.unitString,
+              dateFrom: p.dateFrom.toString(),
+              dateTo: p.dateTo.toString(),
             );
           }
           if (p.value is WorkoutHealthValue) {
-            return ListTile(
-              title: Text(
-                  "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.typeToString()}"),
-              trailing: Text(
-                  '${(p.value as WorkoutHealthValue).workoutActivityType.typeToString()}'),
-              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
+            return MonitorDashboard(
+              value: p.value.toString(),
+              type: p.typeString,
+              unitString: p.unitString,
+              dateFrom: p.dateFrom.toString(),
+              dateTo: p.dateTo.toString(),
             );
           }
-          return ListTile(
-            title: Text("${p.typeString}: ${p.value}"),
-            trailing: Text('${p.unitString}'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
+          return SizedBox(
+            height: size.height,
+            width: double.infinity,
+            child: MonitorDashboard(
+              value: p.value.toString(),
+              type: p.typeString,
+              unitString: p.unitString,
+              dateFrom: p.dateFrom.toString(),
+              dateTo: p.dateTo.toString(),
+            ),
           );
         });
   }
@@ -337,7 +347,32 @@ class _HealthAppState extends State<HealthApp> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('Health Example'),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.red[900]!,
+                    Colors.blue[200]!,
+                  ],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                ),
+              ),
+            ),
+            leading: Text(
+              "Good Morning, Tunç",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+            title: Text(
+              "Today Report",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.file_download),

@@ -2,9 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:ghealth/widgets/widgets_shelf.dart';
 
 class ReportCard extends StatelessWidget {
-  const ReportCard({
-    Key? key,
-  }) : super(key: key);
+  final String value;
+  final String type;
+  final String unitString;
+  final String dateFrom;
+  final String dateTo;
+
+  const ReportCard(
+      {Key? key,
+      required this.value,
+      required this.type,
+      required this.unitString,
+      required this.dateFrom,
+      required this.dateTo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
