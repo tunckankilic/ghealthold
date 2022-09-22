@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:permission_handler/permission_handler.dart';
+
 import 'package:flutter/material.dart';
 import 'package:health/health.dart';
+
+void main() => runApp(HealthApp());
 
 class HealthApp extends StatefulWidget {
   @override
@@ -26,7 +30,7 @@ class _HealthAppState extends State<HealthApp> {
   int _nofSteps = 10;
   double _mgdl = 10.0;
 
-  //Creating an Object of Health Factory
+  // create a HealthFactory for use in the app
   HealthFactory health = HealthFactory();
 
   /// Fetch data points from the health plugin and show them in the app.
@@ -39,57 +43,25 @@ class _HealthAppState extends State<HealthApp> {
       HealthDataType.WEIGHT,
       HealthDataType.HEIGHT,
       HealthDataType.BLOOD_GLUCOSE,
-      // HealthDataType.WORKOUT,
-      // HealthDataType.ACTIVE_ENERGY_BURNED,
-      // HealthDataType.BLOOD_OXYGEN,
-      // HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-      // HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-      // HealthDataType.BODY_FAT_PERCENTAGE,
-      // HealthDataType.BODY_MASS_INDEX,
-      // HealthDataType.BODY_TEMPERATURE,
-      // HealthDataType.HEART_RATE,
-      // HealthDataType.MOVE_MINUTES,
-      // HealthDataType.DISTANCE_DELTA,
-      // HealthDataType.SLEEP_IN_BED,
-      // HealthDataType.SLEEP_AWAKE,
-      // HealthDataType.SLEEP_ASLEEP,
-      // HealthDataType.WATER,
-      // HealthDataType.WORKOUT,
+      HealthDataType.WORKOUT,
     ];
 
-    //coresponsing permissions
+    // with coresponsing permissions
     final permissions = [
       HealthDataAccess.READ,
       HealthDataAccess.READ,
       HealthDataAccess.READ,
       HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
-      // HealthDataAccess.READ,
+      HealthDataAccess.READ,
       // HealthDataAccess.READ,
     ];
 
     // get data within the last 24 hours
     final now = DateTime.now();
-    final yesterday = now.subtract(Duration(days: 5));
-
-    /* 
-    Requesting access to the data types before reading them
-    note that strictly speaking, the [permissions] are not
-    needed, since we only want READ access.
-   */
+    final yesterday = now.subtract(Duration(days: 1));
+    // requesting access to the data types before reading them
+    // note that strictly speaking, the [permissions] are not
+    // needed, since we only want READ access.
     bool requested =
         await health.requestAuthorization(types, permissions: permissions);
     print('requested: $requested');
@@ -107,10 +79,9 @@ class _HealthAppState extends State<HealthApp> {
         // fetch health data
         List<HealthDataPoint> healthData =
             await health.getHealthDataFromTypes(yesterday, now, types);
-        // save all the new data points (only the first 100)
-        _healthDataList.addAll((healthData.length < 100)
+        _healthDataList.addAll((healthData.length < 10)
             ? healthData
-            : healthData.sublist(0, 100));
+            : healthData.sublist(0, 10));
       } catch (error) {
         print("Exception in getHealthDataFromTypes: $error");
       }
@@ -142,6 +113,8 @@ class _HealthAppState extends State<HealthApp> {
       HealthDataType.HEIGHT,
       HealthDataType.BLOOD_GLUCOSE,
       HealthDataType.WORKOUT, // Requires Google Fit on Android
+      // Uncomment these lines on iOS - only available on iOS
+      // HealthDataType.AUDIOGRAM,
     ];
     final rights = [
       HealthDataAccess.WRITE,
@@ -162,33 +135,40 @@ class _HealthAppState extends State<HealthApp> {
         await HealthFactory.hasPermissions(types, permissions: rights);
     if (hasPermissions == false) {
       perm = await health.requestAuthorization(types, permissions: permissions);
+      print("**********************");
+      print(perm);
+      print("**********************");
     }
 
     // Store a count of steps taken
     _nofSteps = Random().nextInt(10);
     bool success = await health.writeHealthData(
         _nofSteps.toDouble(), HealthDataType.STEPS, earlier, now);
-
+      print("**********************");
+      print(success);
+      print("**********************");
     // Store a height
     success &=
         await health.writeHealthData(1.93, HealthDataType.HEIGHT, earlier, now);
-
+ print("**********************");
+      print(success);
+      print("**********************");
     // Store a Blood Glucose measurement
     _mgdl = Random().nextInt(10) * 1.0;
     success &= await health.writeHealthData(
         _mgdl, HealthDataType.BLOOD_GLUCOSE, now, now);
-
+ print("**********************");
+      print(success);
+      print("**********************");
     // Store a workout eg. running
     success &= await health.writeWorkoutData(
-      HealthWorkoutActivityType.RUNNING, earlier, now,
-      // The following are optional parameters
-      // and the UNITS are functional on iOS ONLY!
-      totalEnergyBurned: 230,
-      totalEnergyBurnedUnit: HealthDataUnit.KILOCALORIE,
-      totalDistance: 1234,
-      totalDistanceUnit: HealthDataUnit.FOOT,
+      HealthWorkoutActivityType.RUNNING,
+      earlier,
+      now,
     );
-
+ print("**********************");
+      print(success);
+      print("**********************");
     // Store an Audiogram
     // Uncomment these on iOS - only available on iOS
     // const frequencies = [125.0, 500.0, 1000.0, 2000.0, 4000.0, 8000.0];
@@ -260,6 +240,22 @@ class _HealthAppState extends State<HealthApp> {
         itemCount: _healthDataList.length,
         itemBuilder: (_, index) {
           HealthDataPoint p = _healthDataList[index];
+          if (p.value is AudiogramHealthValue) {
+            return ListTile(
+              title: Text("${p.typeString}: ${p.value}"),
+              trailing: Text('${p.unitString}'),
+              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
+            );
+          }
+          if (p.value is WorkoutHealthValue) {
+            return ListTile(
+              title: Text(
+                  "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.typeToString()}"),
+              trailing: Text(
+                  '${(p.value as WorkoutHealthValue).workoutActivityType.typeToString()}'),
+              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
+            );
+          }
           return ListTile(
             title: Text("${p.typeString}: ${p.value}"),
             trailing: Text('${p.unitString}'),
