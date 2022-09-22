@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ghealth/widgets/widgets_shelf.dart';
 
 class MonitorDashboard extends StatelessWidget {
   final String value;
@@ -48,29 +47,16 @@ class MonitorDashboard extends StatelessWidget {
             ),
           ),
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 8.0,
-                left: 20,
-                right: 20,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 100,),
-                  SingleChildScrollView(child: ReportCard(value: value, type: type, unitString: unitString, dateFrom: dateFrom, dateTo: dateTo)),
-                  ListTile(
-                    title: Text("${type}: ${value}"),
-                    trailing: Text('${unitString}'),
-                    subtitle: Text('${dateFrom} - ${dateTo}'),
-                  ),
-                ],
-              ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ListTile(
+              title: Text("${type}: ${value}",),
+              trailing: Text('${unitString}'),
+              subtitle: Text('${dateFrom} - ${dateTo}'),
             ),
-          ),
+          ],
         ),
       ],
     );

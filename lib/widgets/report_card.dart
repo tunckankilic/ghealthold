@@ -50,7 +50,12 @@ class ReportCard extends StatelessWidget {
                 height: 30,
               ),
               Center(
-                child: CircularTrackWidget(),
+                child: CircularTrackWidget(
+                    value: value,
+                    type: type,
+                    unitString: unitString,
+                    dateFrom: dateFrom,
+                    dateTo: dateTo),
               ),
               SizedBox(
                 height: 30,
@@ -63,21 +68,8 @@ class ReportCard extends StatelessWidget {
                     Expanded(
                       child: DetailCard(
                         color: Colors.red,
-                        label: "123",
-                        labelColor: Colors.white,
-                      ),
-                    ),
-                    Expanded(
-                      child: DetailCard(
-                        color: Colors.black,
-                        label: "345",
-                        labelColor: Colors.white,
-                      ),
-                    ),
-                    Expanded(
-                      child: DetailCard(
-                        color: Colors.blue,
-                        label: "456",
+                        label: value,
+                        type: type,
                         labelColor: Colors.white,
                       ),
                     ),

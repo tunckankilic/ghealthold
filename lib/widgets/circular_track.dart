@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 
-
 class CircularTrackWidget extends StatelessWidget {
+  final String value;
+  final String type;
+  final String unitString;
+  final String dateFrom;
+  final String dateTo;
   const CircularTrackWidget({
     Key? key,
+    required this.value,
+    required this.type,
+    required this.unitString,
+    required this.dateFrom,
+    required this.dateTo,
   }) : super(key: key);
 
   @override
@@ -25,7 +34,7 @@ class CircularTrackWidget extends StatelessWidget {
               height: 80,
             ),
             Text(
-              "938/2500",
+              value,
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.black,
@@ -33,7 +42,7 @@ class CircularTrackWidget extends StatelessWidget {
               ),
             ),
             Text(
-              "Calories",
+              type,
               style: TextStyle(
                 fontSize: 15,
                 color: Colors.grey[300],

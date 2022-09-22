@@ -4,19 +4,21 @@ class DetailCard extends StatelessWidget {
   final Color? color;
   final String? label;
   final Color? labelColor;
+  final String? type;
   const DetailCard({
     Key? key,
     this.color,
     this.label,
     this.labelColor,
+    this.type,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(8),
-      height: 150,
-      width: 100,
+      // height: 150,
+      // width: 100,
       decoration: BoxDecoration(
         color: color ?? Colors.orange[900],
         borderRadius: BorderRadius.circular(12),
@@ -36,36 +38,32 @@ class DetailCard extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Text(
-              label.toString(),
-              style: TextStyle(
-                fontSize: 14,
-                color: labelColor ?? Colors.black,
-                fontWeight: FontWeight.bold,
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  Text(
+                    label.toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: labelColor ?? Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    type.toString(),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: labelColor ?? Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "6/31",
-              style: TextStyle(
-                fontSize: 12,
-                color: labelColor ?? Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "25g Left",
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
-              ),
-            )
           ],
         ),
       ),

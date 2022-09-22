@@ -1,10 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
-
-import 'package:ghealth/monitor_dashboard_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:flutter/material.dart';
 import 'package:health/health.dart';
 
@@ -30,7 +26,7 @@ class _HealthAppState extends State<HealthApp> {
   int _nofSteps = 10;
   double _mgdl = 10.0;
 
-  // create a HealthFactory for use in the app
+  //Creating an Object of Health Factory
   HealthFactory health = HealthFactory();
 
   /// Fetch data points from the health plugin and show them in the app.
@@ -43,27 +39,57 @@ class _HealthAppState extends State<HealthApp> {
       HealthDataType.WEIGHT,
       HealthDataType.HEIGHT,
       HealthDataType.BLOOD_GLUCOSE,
-      HealthDataType.WORKOUT,
-      // Uncomment these lines on iOS - only available on iOS
-      // HealthDataType.AUDIOGRAM
+      // HealthDataType.WORKOUT,
+      // HealthDataType.ACTIVE_ENERGY_BURNED,
+      // HealthDataType.BLOOD_OXYGEN,
+      // HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+      // HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+      // HealthDataType.BODY_FAT_PERCENTAGE,
+      // HealthDataType.BODY_MASS_INDEX,
+      // HealthDataType.BODY_TEMPERATURE,
+      // HealthDataType.HEART_RATE,
+      // HealthDataType.MOVE_MINUTES,
+      // HealthDataType.DISTANCE_DELTA,
+      // HealthDataType.SLEEP_IN_BED,
+      // HealthDataType.SLEEP_AWAKE,
+      // HealthDataType.SLEEP_ASLEEP,
+      // HealthDataType.WATER,
+      // HealthDataType.WORKOUT,
     ];
 
-    // with coresponsing permissions
+    //coresponsing permissions
     final permissions = [
       HealthDataAccess.READ,
       HealthDataAccess.READ,
       HealthDataAccess.READ,
       HealthDataAccess.READ,
-      HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
+      // HealthDataAccess.READ,
       // HealthDataAccess.READ,
     ];
 
     // get data within the last 24 hours
     final now = DateTime.now();
     final yesterday = now.subtract(Duration(days: 5));
-    // requesting access to the data types before reading them
-    // note that strictly speaking, the [permissions] are not
-    // needed, since we only want READ access.
+
+    /* 
+    Requesting access to the data types before reading them
+    note that strictly speaking, the [permissions] are not
+    needed, since we only want READ access.
+   */
     bool requested =
         await health.requestAuthorization(types, permissions: permissions);
     print('requested: $requested');
@@ -116,8 +142,6 @@ class _HealthAppState extends State<HealthApp> {
       HealthDataType.HEIGHT,
       HealthDataType.BLOOD_GLUCOSE,
       HealthDataType.WORKOUT, // Requires Google Fit on Android
-      // Uncomment these lines on iOS - only available on iOS
-      // HealthDataType.AUDIOGRAM,
     ];
     final rights = [
       HealthDataAccess.WRITE,
@@ -235,36 +259,11 @@ class _HealthAppState extends State<HealthApp> {
     return ListView.builder(
         itemCount: _healthDataList.length,
         itemBuilder: (_, index) {
-          Size size = MediaQuery.of(context).size;
           HealthDataPoint p = _healthDataList[index];
-          if (p.value is AudiogramHealthValue) {
-            return MonitorDashboard(
-              value: p.value.toString(),
-              type: p.typeString,
-              unitString: p.unitString,
-              dateFrom: p.dateFrom.toString(),
-              dateTo: p.dateTo.toString(),
-            );
-          }
-          if (p.value is WorkoutHealthValue) {
-            return MonitorDashboard(
-              value: p.value.toString(),
-              type: p.typeString,
-              unitString: p.unitString,
-              dateFrom: p.dateFrom.toString(),
-              dateTo: p.dateTo.toString(),
-            );
-          }
-          return SizedBox(
-            height: size.height,
-            width: double.infinity,
-            child: MonitorDashboard(
-              value: p.value.toString(),
-              type: p.typeString,
-              unitString: p.unitString,
-              dateFrom: p.dateFrom.toString(),
-              dateTo: p.dateTo.toString(),
-            ),
+          return ListTile(
+            title: Text("${p.typeString}: ${p.value}"),
+            trailing: Text('${p.unitString}'),
+            subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
           );
         });
   }
@@ -320,59 +319,12 @@ class _HealthAppState extends State<HealthApp> {
     return _contentNotFetched();
   }
 
-  void getPermissions() async {
-    if (Platform.isAndroid) {
-      final permissionStatus = Permission.activityRecognition.request();
-      if (await permissionStatus.isDenied ||
-          await permissionStatus.isPermanentlyDenied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                "activityRecognition permission required to fetch your steps count"),
-          ),
-        );
-        return;
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    getPermissions();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.red[900]!,
-                    Colors.blue[200]!,
-                  ],
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                ),
-              ),
-            ),
-            leading: Text(
-              "Good Morning, Tunç",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-            ),
-            title: Text(
-              "Today Report",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-            ),
+            title: const Text('Health Example'),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.file_download),
