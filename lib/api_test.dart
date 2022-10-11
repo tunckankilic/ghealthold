@@ -79,9 +79,8 @@ class _HealthAppState extends State<HealthApp> {
         // fetch health data
         List<HealthDataPoint> healthData =
             await health.getHealthDataFromTypes(yesterday, now, types);
-        _healthDataList.addAll((healthData.length < 10)
-            ? healthData
-            : healthData.sublist(0, 10));
+        _healthDataList.addAll(
+            (healthData.length < 10) ? healthData : healthData.sublist(0, 10));
       } catch (error) {
         print("Exception in getHealthDataFromTypes: $error");
       }
@@ -144,31 +143,31 @@ class _HealthAppState extends State<HealthApp> {
     _nofSteps = Random().nextInt(10);
     bool success = await health.writeHealthData(
         _nofSteps.toDouble(), HealthDataType.STEPS, earlier, now);
-      print("**********************");
-      print(success);
-      print("**********************");
+    print("**********************");
+    print(success);
+    print("**********************");
     // Store a height
     success &=
         await health.writeHealthData(1.93, HealthDataType.HEIGHT, earlier, now);
- print("**********************");
-      print(success);
-      print("**********************");
+    print("**********************");
+    print(success);
+    print("**********************");
     // Store a Blood Glucose measurement
     _mgdl = Random().nextInt(10) * 1.0;
     success &= await health.writeHealthData(
         _mgdl, HealthDataType.BLOOD_GLUCOSE, now, now);
- print("**********************");
-      print(success);
-      print("**********************");
+    print("**********************");
+    print(success);
+    print("**********************");
     // Store a workout eg. running
     success &= await health.writeWorkoutData(
       HealthWorkoutActivityType.RUNNING,
       earlier,
       now,
     );
- print("**********************");
-      print(success);
-      print("**********************");
+    print("**********************");
+    print(success);
+    print("**********************");
     // Store an Audiogram
     // Uncomment these on iOS - only available on iOS
     // const frequencies = [125.0, 500.0, 1000.0, 2000.0, 4000.0, 8000.0];
